@@ -1,0 +1,23 @@
+{
+  "name": "c341-products",
+  "version": "1.0.0",
+  "description": "My Second Proyect",
+  "homepage": "https://github.com/Danae-DJ/C341-Products#readme",
+  "bugs": {
+    "url": "https://github.com/Danae-DJ/C341-Products/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danae-DJ/C341-Products.git"
+  },
+  "license": "ISC",
+  "author": "Dánae De la Cruz",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
