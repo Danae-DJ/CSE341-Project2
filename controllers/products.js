@@ -42,7 +42,7 @@ const createProduct = async (req, res) => {
     if (response.acknowledged) {
         res.status(204).send();
     } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the contact.');
+        res.status(500).json(response.error || 'Some error occurred while updating the product.');
     }
 };
 
