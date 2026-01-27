@@ -4,12 +4,16 @@ const ObjectId = require('mongodb').ObjectId;
 
 //GET all products
 const getAllProducts = async (req, res) => {
-    //#swagger.tags=['Products']
+  //#swagger.tags=['Products']
+  try {
     const result = await mongodb.getDatabase().db().collection('products').find();
-    result.toArray().then((products) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(products);
-    });
+    const products = await result.toArray();
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message || 'Some error occurred getting products.' });
+  }
 };
 
 // GET product by ID
@@ -37,7 +41,8 @@ const createProduct = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-    //#swagger.tags=['Products']
+  //#swagger.tags=['Products']
+  try {
     const product = {
       name: req.body.name,
       price: req.body.price,
@@ -49,10 +54,13 @@ const createProduct = async (req, res) => {
     };
     const response = await mongodb.getDatabase().db().collection('products').insertOne(product);
     if (response.acknowledged) {
-        res.status(204).send(); //res.status(201).json({ message: 'Product created successfully' });
+      res.status(204).send();
     } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the product.');
+      res.status(500).json({ message: 'Some error occurred while creating the product.' });
     }
+  } catch (err) {
+    res.status(500).json({ message: err.message || 'Some error occurred while creating the product.' });
+  }
 };
 
 // PUT update a product
@@ -87,13 +95,17 @@ const updateProduct = async (req, res) => {
 
 //DELETE product
 const deleteProduct = async (req, res) => {
-    //#swagger.tags=['Products']
+  //#swagger.tags=['Products']
+  try {
     const productId = new ObjectId(req.params.id);
     const response = await mongodb.getDatabase().db().collection('products').deleteOne({ _id: productId });
     if (response.deletedCount === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
     res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message || 'Some error occurred while deleting the product.' });
+  }
 };
 
 module.exports = {
