@@ -28,6 +28,7 @@ router.put('/:id', param('id').isMongoId().withMessage('Invalid order ID'),
     body('quantity').isInt({ min: 1 }).withMessage('quantity must be at least 1'),
     body('totalPrice').isFloat({ min: 0 }).withMessage('totalPrice must be a number'),
     body('status').notEmpty().withMessage('status is required'),
+    ordersController.updateOrder
 );
 
 //DELETE Order
