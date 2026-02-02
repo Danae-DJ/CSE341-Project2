@@ -1,4 +1,24 @@
-const express = require('express');
+const router = require('express').Router();
+const productsController = require('../controllers/products');
+
+const { isAuthenticated } = require('../middleware/authenticate');
+const { validate } = require('../middleware/validate');
+
+router.get('/',validate, productsController.getAllProducts);
+router.get('/:id',validate, productsController.getSingleProduct);
+router.post('/', isAuthenticated, validate, productsController.createProduct);
+router.put('/:id', isAuthenticated, validate, productsController.updateProduct);
+router.delete('/:id', isAuthenticated, validate, productsController.deleteProduct);
+
+module.exports = router;
+
+
+
+
+
+
+
+/*const express = require('express');
 const router = express.Router();
 const { body, param } = require('express-validator');//validation
 const productsController = require('../controllers/products');
@@ -43,5 +63,4 @@ router.delete('/:id',
     param('id').isMongoId(),
   productsController.deleteProduct
 );
-
-module.exports = router;
+*/

@@ -1,4 +1,24 @@
-const express = require('express');
+const router = require('express').Router();
+const ordersController = require('../controllers/orders');
+
+const { isAuthenticated } = require('../middleware/authenticate');
+const { validate } = require('../middleware/validate');
+
+router.get('/',validate, ordersController.getAllOrders);
+router.get('/:id',validate, ordersController.getSingleOrder);
+router.post('/', isAuthenticated, validate, ordersController.createOrder);
+router.put('/:id', isAuthenticated, validate, ordersController.updateOrder);
+router.delete('/:id', isAuthenticated, validate, ordersController.deleteOrder);
+
+module.exports = router;
+
+
+
+
+
+
+
+/*const express = require('express');
 const router = express.Router();
 const { body, param } = require('express-validator');
 const ordersController = require('../controllers/orders');
@@ -36,5 +56,4 @@ router.delete('/:id',
     param('id').isMongoId().withMessage('Invalid order ID'),
     ordersController.deleteOrder
 );
-
-module.exports = router;
+*/
