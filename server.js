@@ -53,8 +53,25 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     done(null, user);
 });
+//authenticate into Github
+//alternative name login
+app.get('/', (req, res) => {
+  if (req.session.user) {
+    const name =
+      req.session.user.displayName ||
+      req.session.user.username ||
+      req.session.user.profileUrl;
 
-app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out")});
+    res.send(`Logged in as ${name}`);
+  } else {
+    res.send("Logged Out");
+  }
+});
+
+/*//Teacher example:
+app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out") });
+*/
+app.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 
 app.get('/github/callback', passport.authenticate( 'github', {
     failureRedirect: '/api-docs', session: false
@@ -63,6 +80,12 @@ app.get('/github/callback', passport.authenticate( 'github', {
         req.session.user = req.user;
         res.redirect('/');
     });
+
+/*//Extra: information about the clientId 
+app.get('/me', (req, res) => {
+  res.json(req.session.user);
+});
+*/
 
 mongodb.initDb((err) => {
     if (err) {
